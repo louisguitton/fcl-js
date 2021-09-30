@@ -48,7 +48,7 @@ export async function extension(service, opts = {}) {
       window.removeEventListener("message", buildInternal)
       onClose()
     } catch (error) {
-      console.error("Tab Close Error", error)
+      console.error("Extension Close Error", error)
     }
   }
 

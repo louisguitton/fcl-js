@@ -3,13 +3,12 @@ import {extension} from "./utils/extension"
 import {normalizePollingResponse} from "../../normalize/polling-response"
 import {configLens} from "../../../config-utils"
 
-const extensions = ["liquality"]
-
-const extInstalled = ext =>
-  extensions.includes(ext) && window[ext].onflow != null
-
 export function execExtRPC(service, body, opts) {
   return new Promise((resolve, reject) => {
+    const extensions = window.fcl_extensions || []
+    const extInstalled = ext =>
+      extensions.includes(ext) && window[ext].onflow != null
+
     invariant(extInstalled(service.endpoint), "No extension found")
 
     extension(service, {
