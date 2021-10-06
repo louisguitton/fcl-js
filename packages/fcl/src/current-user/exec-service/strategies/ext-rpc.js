@@ -5,12 +5,6 @@ import {configLens} from "../../../config-utils"
 
 export function execExtRPC(service, body, opts) {
   return new Promise((resolve, reject) => {
-    const extensions = window.fcl_extensions || []
-    const extInstalled = ext =>
-      extensions.includes(ext) && window[ext].onflow != null
-
-    invariant(extInstalled(service.endpoint), "No extension found")
-
     extension(service, {
       async onReady(_, {send}) {
         try {
@@ -45,6 +39,11 @@ export function execExtRPC(service, body, opts) {
 
             case "DECLINED":
               reject(`Declined: ${resp.reason || "No reason supplied"}`)
+              close()
+              break
+
+            case "REDIRECT":
+              resolve(resp.data)
               close()
               break
 
